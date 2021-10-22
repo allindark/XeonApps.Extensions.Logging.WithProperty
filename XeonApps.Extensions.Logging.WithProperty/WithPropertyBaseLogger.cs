@@ -31,8 +31,9 @@ namespace XeonApps.Extensions.Logging.WithProperty
     {
       if (state is IEnumerable<KeyValuePair<string, object>> logValues)
       {
-        var asList = logValues as IReadOnlyList<KeyValuePair<string, object>>;
-        var mergedState = new WithManyPropertiesLogger(this, asList ?? logValues.ToList());
+        var properties = new List<KeyValuePair<string, object>>(logValues);
+        properties.AddRange(this);
+        var mergedState = new WithManyPropertiesLogger(this, properties);
 
         _logger.Log(logLevel, eventId, mergedState, exception, Formatter);
       }
